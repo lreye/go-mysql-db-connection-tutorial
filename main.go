@@ -1,12 +1,13 @@
 package main
 
-import ( 
+import (
 	"database/sql"
-    "fmt"
-    "log"
-    "os"
+	"fmt"
+	"log"
+	"os"
 
 	"github.com/go-sql-driver/mysql"
+	"github.com/joho/godotenv"
 )
 
 var db *sql.DB
@@ -18,6 +19,10 @@ type Album struct {
 }
 
 func main() {
+    env_err := godotenv.Load(".env")
+	if env_err != nil {
+		log.Fatalf("Error loading .env file")
+	}
     // Capture connection properties.
     cfg := mysql.Config{
         User:   os.Getenv("DBUSER"),
