@@ -1,4 +1,4 @@
-module example/data-access
+module test/go-mysql-db-connection-tutorial
 
 go 1.23.3
 
