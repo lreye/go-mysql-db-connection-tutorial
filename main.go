@@ -20,26 +20,7 @@ type Album struct {
 
 func main() {
 	// Capture connection properties.
-	cfg := mysql.Config{
-		User:                 os.Getenv("DBUSER"),
-		Passwd:               os.Getenv("DBPASS"),
-		Net:                  "tcp",
-		Addr:                 "go-db-container:3306",
-		DBName:               "recordings",
-		AllowNativePasswords: true,
-	}
-	// Get a database handle.
-	var err error
-	db, err = sql.Open("mysql", cfg.FormatDSN())
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	pingErr := db.Ping()
-	if pingErr != nil {
-		log.Fatal(pingErr)
-	}
-	fmt.Println("Connected!")
+	db = connectToDB()
 
 	albums, err := albumsByArtist("John Coltrane")
 	if err != nil {
@@ -63,6 +44,30 @@ func main() {
 		log.Fatal(err)
 	}
 	fmt.Printf("ID of added album: %v\n", albID)
+}
+
+func connectToDB() (db *sql.DB) {
+	cfg := mysql.Config{
+		User:                 os.Getenv("DBUSER"),
+		Passwd:               os.Getenv("DBPASS"),
+		Net:                  "tcp",
+		Addr:                 os.Getenv("MYSQL_DB_ADDR"),
+		DBName:               os.Getenv("MYSQL_DATABASE"),
+		AllowNativePasswords: true,
+	}
+	// Get a database handle.
+	var err error
+	db, err = sql.Open("mysql", cfg.FormatDSN())
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	pingErr := db.Ping()
+	if pingErr != nil {
+		log.Fatal(pingErr)
+	}
+	fmt.Println("Connected!")
+	return db
 }
 
 // albumsByArtist queries for albums that have the specified artist name.

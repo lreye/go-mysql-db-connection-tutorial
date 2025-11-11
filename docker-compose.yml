@@ -23,7 +23,7 @@
           - app-network
         restart: always
         ports:
-          - "3306:3306"
+          - "3307:3307"
   
     volumes:
       mysql-data:   # Declare a named volume to persist MySQL data
